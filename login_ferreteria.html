@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - El Tornillo Feliz</title>
+    <style>
+        :root{
+            --bg:#f6f9fc;
+            --panel:#ffffff;
+            --muted:#5b6776;
+            --text:#0c1116;
+            --primary:#2563eb;
+            --primary-700:#1e40af;
+            --secondary:#f59e0b;
+            --accent:#06b6d4;
+            --ring: rgba(37,99,235,.35);
+            --radius:18px;
+            --shadow:0 10px 30px rgba(2,6,23,.08);
+            --success:#10b981;
+            --error:#ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eef4ff 0%, var(--bg) 65%);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Elementos decorativos de fondo */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37,99,235,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(245,158,11,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6,182,212,0.06) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(1deg) scale(1.02); }
+            66% { transform: rotate(-1deg) scale(0.98); }
+        }
+
+        .auth-container {
+            background: linear-gradient(180deg, 
+                rgba(255,255,255,0.95) 0%, 
+                rgba(255,255,255,0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(2,6,23,0.1),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+            min-height: auto;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .brand-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .brand-auth:hover {
+            transform: translateY(-2px);
+        }
+
+        .brand-auth::before {
+            content: "🔧";
+            font-size: 42px;
+            filter: drop-shadow(0 6px 12px rgba(37,99,235,0.3));
+            animation: toolRotate 4s ease-in-out infinite;
+        }
+
+        @keyframes toolRotate {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        .brand-auth b {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: brandGradient 4s ease infinite;
+        }
+
+        @keyframes brandGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .auth-subtitle {
+            color: var(--muted);
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 2px solid rgba(2,6,23,0.08);
+            background: rgba(255,255,255,0.8);
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--ring);
+            background: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 4px rgba(239,68,68,0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--muted);
+            opacity: 0.7;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            background: rgba(37,99,235,0.1);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid rgba(2,6,23,0.2);
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .forgot-link, .switch-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .forgot-link:hover, .switch-link:hover {
+            color: var(--primary-700);
+            text-decoration: underline;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-700));
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .auth-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.4);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .auth-btn:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(2,6,23,0.1), transparent);
+        }
+
+        .divider span {
+            background: var(--panel);
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid rgba(2,6,23,0.08);
+            border-radius: 10px;
+            background: #ffffff;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary);
+            background: rgba(37,99,235,0.05);
+            transform: translateY(-1px);
+        }
+
+        .switch-text {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.success {
+            background: rgba(16,185,129,0.1);
+            color: var(--success);
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .alert.error {
+            background: rgba(239,68,68,0.1);
+            color: var(--error);
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 25px;
+                margin: 10px;
+                border-radius: 20px;
+            }
+
+            .brand-auth::before {
+                font-size: 36px;
+            }
+
+            .brand-auth b {
+                font-size: 24px;
+            }
+
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Partículas */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particleFloat 15s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas decorativas -->
+    <div class="particle" style="left: 10%; animation-delay: -2s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: -4s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: -6s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: -8s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: -10s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: -12s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: -14s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: -16s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: -18s;"></div>
+
+    <div class="auth-container">
+        <!-- Alertas -->
+        <div id="alert" class="alert"></div>
+
+        <!-- FORMULARIO DE LOGIN -->
+        <div id="loginForm" class="auth-form">
+            <div class="auth-header">
+                <a href="#" class="brand-auth">
+                    <b>El Tornillo Feliz</b>
+                </a>
+                <p class="auth-subtitle">Accede a tu cuenta para continuar</p>
+            </div>
+
+            <form id="loginSubmit">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">Correo electrónico</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <span>Recordarme</span>
+                    </label>
+                    <a href="#" class="forgot-link" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="auth-btn" id="loginBtn">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>o continúa con</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" onclick="loginWithGoogle()">
+                    <span style="color: #4285f4;">🌐</span>
+                    Google
+                </button>
+                <button class="social-btn" onclick="loginWithFacebook()">
+                    <span style="color: #1877f2;">📘</span>
+                    Facebook
+                </button>
+            </div>
+
+            <p class="switch-text">
+                ¿No tienes cuenta? <a href="#" class="switch-link" onclick="showRegister()">Regístrate aquí</a>
+            </p>
+        </div>
+
+        <!-- FORMULARIO DE REGISTRO -->
+        <div id="registerForm" class="auth-form hidden">
+            <div class="auth-header">
+                <a href="#" class="brand-auth">
+                    <b>El Tornillo Feliz</b>
+                </a>
+                <p class="auth-subtitle">Crea tu cuenta nueva</p>
+            </div>
+
+            <form id="registerSubmit">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">Nombre</label>
+                        <input type="text" id="firstName" class="form-input" placeholder="Juan" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Apellido</label>
+                        <input type="text" id="lastName" class="form-input" placeholder="Pérez" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerEmail">Correo electrónico</label>
+                    <input type="email" id="registerEmail" class="form-input" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerPassword">Contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="registerPassword" class="form-input" placeholder="••••••••" required minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirmar contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••" required minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-btn" id="registerBtn">
+                    Crear Cuenta
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>o regístrate con</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" onclick="registerWithGoogle()">
+                    <span style="color: #4285f4;">🌐</span>
+                    Google
+                </button>
+                <button class="social-btn" onclick="registerWithFacebook()">
+                    <span style="color: #1877f2;">📘</span>
+                    Facebook
+                </button>
+            </div>
+
+            <p class="switch-text">
+                ¿Ya tienes cuenta? <a href="#" class="switch-link" onclick="showLogin()">Inicia sesión</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos simulada en localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('ferreteria_users') || '[]');
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('ferreteria_users', JSON.stringify(users));
+        }
+
+        function saveCurrentUser(user) {
+            sessionStorage.setItem('current_user', JSON.stringify(user));
+        }
+
+        // Usuario admin por defecto
+        function initializeDefaultUser() {
+            const users = getUsers();
+            if (users.length === 0) {
+                const defaultUser = {
+                    id: 1,
+                    firstName: 'Admin',
+                    lastName: 'Ferretería',
+                    email: 'admin@tornillofeliz.com',
+                    password: 'admin123',
+                    createdAt: new Date().toISOString()
+                };
+                saveUsers([defaultUser]);
+                console.log('Usuario por defecto creado: admin@tornillofeliz.com / admin123');
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleBtn = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        // Show/Hide forms
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            hideAlert();
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            hideAlert();
+        }
+
+        function showForgotPassword() {
+            showAlert('Funcionalidad de recuperación de contraseña próximamente. Por ahora usa: admin@tornillofeliz.com / admin123', 'success');
+        }
+
+        // Alerts
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+            
+            if (type === 'success' && !message.includes('próximamente')) {
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function hideAlert() {
+            document.getElementById('alert').style.display = 'none';
+        }
+
+        // Login functionality
+        document.getElementById('loginSubmit').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('remember').checked;
+            const btn = document.getElementById('loginBtn');
+            
+            // Validation
+            if (!email || !password) {
+                showAlert('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Verificando...';
+            
+            setTimeout(() => {
+                const users = getUsers();
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    showAlert('¡Login exitoso! Redirigiendo...', 'success');
+                    saveCurrentUser(user);
+                    
+                    if (remember) {
+                        localStorage.setItem('remember_user', email);
+                    }
+                    
+                    setTimeout(() => {
+                        // Aquí redirigirias a la página principal
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    showAlert('Credenciales incorrectas. Intenta con admin@tornillofeliz.com / admin123', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Iniciar Sesión';
+                }
+            }, 1000);
+        });
+
+        // Register functionality
+        document.getElementById('registerSubmit').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const btn = document.getElementById('registerBtn');
+            
+            // Validation
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                showAlert('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+
+            // Check if user exists
+            const users = getUsers();
+            if (users.find(u => u.email === email)) {
+                showAlert('Ya existe una cuenta con este correo', 'error');
+                return;
+            }
+
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Creando cuenta...';
+            
+            setTimeout(() => {
+                const newUser = {
+                    id: users.length + 1,
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    createdAt: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                saveUsers(users);
+                
+                showAlert('¡Cuenta creada exitosamente! Puedes iniciar sesión ahora', 'success');
+                
+                // Clear form
+                document.getElementById('registerSubmit').reset();
+                btn.disabled = false;
+                btn.innerHTML = 'Crear Cuenta';
+                
+                setTimeout(() => {
+                    showLogin();
+                    document.getElementById('loginEmail').value = email;
+                }, 2000);
+            }, 1000);
+        });
+
+        // Social login functions
+        function loginWithGoogle() {
+            showAlert('Login con Google próximamente. Por ahora crea una cuenta o usa: admin@tornillofeliz.com / admin123', 'success');
+        }
+
+        function loginWithFacebook() {
+            showAlert('Login con Facebook próximamente. Por ahora crea una cuenta o usa: admin@tornillofeliz.com / admin123', 'success');
+        }
+
+        function registerWithGoogle() {
+            showAlert('Registro con Google próximamente. Por ahora completa el formulario de registro', 'success');
+        }
+
+        function registerWithFacebook() {
+            showAlert('Registro con Facebook próximamente. Por ahora completa el formulario de registro', 'success');
+        }
+
+        // Remember user
+        function loadRememberedUser() {
+            const rememberedEmail = localStorage.getItem('remember_user');
+            if (rememberedEmail) {
+                document.getElementById('loginEmail').value = rememberedEmail;
+                document.getElementById('remember').checked = true;
+            }
+        }
+
+        // Input effects
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+                this.classList.remove('error');
+            });
+        });
+
+        // Initialize
+        window.addEventListener('load', function() {
+            initializeDefaultUser();
+            loadRememberedUser();
+            
+            // Animation
+            document.querySelector('.auth-container').style.animation = 'slideUp 0.6s ease-out';
+            
+            // Show initial instructions
+            setTimeout(() => {
+                showAlert('Usuario de prueba: admin@tornillofeliz.com | Contraseña: admin123', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
