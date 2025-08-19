@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Contacto | El Tornillo Feliz</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="logo"/><b>El Tornillo Feliz</b></a>
+      <div class="spacer"></div>
+      <a href="products.html">Productos</a>
+      <a href="services.html">Servicios</a>
+      <a href="contact.html" aria-current="page">Contacto</a>
+      <a class="btn btn-ghost" href="#cotizacion">Cotización <span class="badge inline"><span data-quote-count>0</span></span></a>
+    </div>
+  </nav>
+
+  <main class="container section">
+    <h1>Contáctanos</h1>
+    <div class="grid">
+      <div class="col-6">
+        <div class="card">
+          <h3>Datos</h3>
+          <p><b>Tel:</b> <a href="tel:+50255555555">+502 5555 5555</a></p>
+          <p><b>Email:</b> <a href="mailto:ventas@example.com">ventas@example.com</a></p>
+          <p id="whatsapp"><b>WhatsApp:</b> <a target="_blank" id="waLink">Chatear</a></p>
+          <p><b>Dirección:</b> 5a Av. Zona 1, Guatemala</p>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3>Ubicación</h3>
+          <iframe title="mapa" src="https://www.openstreetmap.org/export/embed.html?bbox=-90.533%2C14.624%2C-90.511%2C14.642&layer=mapnik&marker=14.633%2C-90.522" style="border:1px solid rgba(255,255,255,.1); width:100%; height:280px; border-radius:12px"></iframe>
+          <p class="mini">Mapa referencial.</p>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card" id="cotizacion">
+          <h3>Enviar mensaje / cotización</h3>
+          <form data-auto data-source="contacto">
+            <div class="form-row">
+              <div><label>Nombre</label><input required name="nombre"/></div>
+              <div><label>Correo</label><input required type="email" name="correo"/></div>
+            </div>
+            <div class="form-row">
+              <div><label>Teléfono</label><input required name="telefono"/></div>
+              <div><label>Asunto</label><input name="asunto" placeholder="Cotización, consulta, etc."/></div>
+            </div>
+            <label>Mensaje</label>
+            <textarea name="mensaje" rows="4"></textarea>
+            <label><input type="checkbox" required/> Acepto la <a href="privacy.html">política de privacidad</a>.</label>
+            <div style="display:flex; gap:10px; margin-top:10px">
+              <button class="btn btn-primary">Enviar</button>
+              <button class="btn btn-ghost" type="button" onclick="sendQuoteViaWhatsApp()">Enviar por WhatsApp</button>
+            </div>
+            <small class="help">Se guarda un registro local y, si configuras el endpoint, también se enviará automáticamente.</small>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3>Newsletter</h3>
+          <form data-auto data-source="newsletter">
+            <label>Correo</label>
+            <input required type="email" name="correo" placeholder="tucorreo@dominio.com"/>
+            <button class="btn btn-secondary" style="margin-top:10px">Suscribirme</button>
+            <small class="help">Recibe ofertas semanales. Puedes cancelar en cualquier momento.</small>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>Panel (solo tú)</h3>
+      <p class="mini">Exporta los datos recopilados localmente en tu navegador.</p>
+      <button class="btn btn-ghost" onclick="exportLeadsCSV()">Exportar leads (.csv)</button>
+      <a class="btn btn-ghost" href="admin.html">Ver más</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span data-year></span> El Tornillo Feliz.</div>
+  </footer>
+
+  <a id="waFab" class="fab-wa hidden" target="_blank" href="#">WhatsApp</a>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/forms.js"></script>
+  <script>
+    (function(){
+      const link = document.getElementById("waLink");
+      if(window.WHATSAPP_PHONE) link.href = `https://wa.me/${window.WHATSAPP_PHONE}`;
+      else link.remove();
+    })();
+  </script>
+</body>
+</html>

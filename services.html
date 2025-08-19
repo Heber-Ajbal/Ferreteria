@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Servicios | El Tornillo Feliz</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="logo"/><b>El Tornillo Feliz</b></a>
+      <div class="spacer"></div>
+      <a href="products.html">Productos</a>
+      <a href="services.html" aria-current="page">Servicios</a>
+      <a href="contact.html">Contacto</a>
+      <a class="btn btn-ghost" href="contact.html#cotizacion">Cotización <span class="badge inline"><span data-quote-count>0</span></span></a>
+    </div>
+  </nav>
+
+  <main class="container section">
+    <h1>Servicios</h1>
+    <div class="grid">
+      <div class="card col-6">
+        <h3>Corte de madera</h3>
+        <p>Medidas a la carta para tus proyectos. Precisión y acabados limpios.</p>
+        <span class="tag tag-secondary">Desde Q 15 por corte</span>
+      </div>
+      <div class="card col-6">
+        <h3>Duplicado de llaves</h3>
+        <p>Rápido y confiable. Amplia variedad de perfiles.</p>
+        <span class="tag tag-secondary">Desde Q 12</span>
+      </div>
+      <div class="card col-6">
+        <h3>Alquiler de herramientas</h3>
+        <p>Taladros, rotomartillos, andamios y más por día o semana.</p>
+        <span class="tag tag-secondary">Consulta disponibilidad</span>
+      </div>
+      <div class="card col-6">
+        <h3>Entrega a domicilio</h3>
+        <p>Servicio 24h en zona metropolitana. Rastrea tu pedido.</p>
+        <span class="tag tag-secondary">Desde Q 25</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>¿Necesitas una cotización de servicio?</h3>
+      <form data-auto data-source="servicios">
+        <div class="form-row">
+          <div><label>Nombre</label><input required name="nombre"/></div>
+          <div><label>Teléfono</label><input required name="telefono"/></div>
+        </div>
+        <label>Servicio</label>
+        <select name="servicio">
+          <option>Corte de madera</option>
+          <option>Duplicado de llaves</option>
+          <option>Alquiler de herramientas</option>
+          <option>Entrega a domicilio</option>
+        </select>
+        <label>Detalles</label>
+        <textarea rows="3" name="detalles"></textarea>
+        <div style="margin-top:10px"><button class="btn btn-primary">Solicitar</button></div>
+        <small class="help">Se guardará un registro local y, si configuras un endpoint, se enviará automáticamente.</small>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span data-year></span> El Tornillo Feliz.</div>
+  </footer>
+
+  <a id="waFab" class="fab-wa hidden" target="_blank" href="#">WhatsApp</a>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/forms.js"></script>
+</body>
+</html>

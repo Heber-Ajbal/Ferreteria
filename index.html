@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ferretería El Tornillo Feliz</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <meta name="description" content="Ferretería con catálogo de herramientas, materiales de construcción y servicios de corte/entrega. Cotiza por WhatsApp y formulario.">
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/img/logo.svg" alt="logo"/>
+        <b>El Tornillo Feliz</b>
+      </a>
+      <div class="spacer"></div>
+      <a href="products.html">Productos</a>
+      <a href="services.html">Servicios</a>
+      <a href="contact.html">Contacto</a>
+      <a class="btn btn-ghost" href="contact.html#cotizacion">Cotización <span class="badge inline" style="margin-left:6px" title="Carrito de cotización"><span data-quote-count>0</span></span></a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="badge">Calidad, buen precio y entrega rápida</span>
+        <h1>Todo para tus proyectos de construcción y hogar</h1>
+        <p class="lead">Herramientas, materiales, electricidad, plomería y más. Pide <b>cotización</b> al instante por WhatsApp o nuestro formulario inteligente.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="products.html">Ver catálogo</a>
+          <a class="btn btn-secondary" href="contact.html#cotizacion">Solicitar cotización</a>
+          <a class="btn btn-ghost" target="_blank" id="ctaWa">WhatsApp</a>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><b>1,500+</b><span>Productos</span></div>
+          <div class="kpi"><b>24h</b><span>Entrega local</span></div>
+          <div class="kpi"><b>10+</b><span>Años de experiencia</span></div>
+          <div class="kpi"><b>4.8★</b><span>Clientes satisfechos</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>¿Qué necesitas hoy?</h3>
+        <form data-auto data-source="hero" id="quickQuote">
+          <div class="form-row">
+            <div>
+              <label>Nombre</label>
+              <input required name="nombre" placeholder="Tu nombre"/>
+            </div>
+            <div>
+              <label>Teléfono</label>
+              <input required name="telefono" placeholder="+502..."/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label>Producto / Categoría</label>
+              <select name="categoria">
+                <option>Herramientas</option>
+                <option>Construcción</option>
+                <option>Electricidad</option>
+                <option>Plomería</option>
+                <option>Pinturas</option>
+              </select>
+            </div>
+            <div>
+              <label>Cantidad aprox.</label>
+              <input name="cantidad" type="number" min="1" value="1"/>
+            </div>
+          </div>
+          <label>Detalles</label>
+          <textarea name="detalles" rows="3" placeholder="Marca, medidas, uso, etc."></textarea>
+          <div style="display:flex; gap:10px; margin-top:10px">
+            <button class="btn btn-primary" type="submit">Pedir cotización</button>
+            <button class="btn btn-ghost" type="button" onclick="sendQuoteViaWhatsApp()">Enviar por WhatsApp</button>
+          </div>
+          <small class="help">Tus datos se almacenarán de forma local para darle seguimiento.</small>
+        </form>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Categorías destacadas</h2>
+      <div class="grid">
+        <a class="card col-4" href="products.html#herramientas"><h3>Herramientas</h3><p>Taladros, sierras, llaves, discos…</p></a>
+        <a class="card col-4" href="products.html#construccion"><h3>Construcción</h3><p>Cemento, varilla, malla, arena…</p></a>
+        <a class="card col-4" href="products.html#electricidad"><h3>Electricidad</h3><p>Cables, breakers, canaletas…</p></a>
+        <a class="card col-4" href="products.html#plomeria"><h3>Plomería</h3><p>Tuberías, conexiones, grifería…</p></a>
+        <a class="card col-4" href="products.html#pinturas"><h3>Pinturas</h3><p>Esmaltes, látex, brochas…</p></a>
+        <a class="card col-4" href="services.html"><h3>Servicios</h3><p>Corte de madera, duplicado de llaves, alquiler…</p></a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Opiniones</h2>
+      <div class="grid">
+        <div class="card col-6"><p>“Excelente atención y me ayudaron a elegir lo mejor para mi proyecto.”</p><span class="mini">— Ana M.</span></div>
+        <div class="card col-6"><p>“Buen precio y entrega el mismo día. ¡Recomendados!”</p><span class="mini">— Luis G.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span data-year></span> El Tornillo Feliz. <a class="inline" href="privacy.html">Privacidad</a></div>
+  </footer>
+
+  <a id="waFab" class="fab-wa hidden" target="_blank" href="#">WhatsApp</a>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/forms.js"></script>
+  <script>
+    // Link WhatsApp in CTA
+    (function(){
+      const link = document.getElementById("ctaWa");
+      if(window.WHATSAPP_PHONE) {
+        link.href = `https://wa.me/${window.WHATSAPP_PHONE}?text=${encodeURIComponent("Hola, me interesa información.")}`;
+      } else {
+        link.href = "contact.html#whatsapp";
+      }
+    })();
+  </script>
+</body>
+</html>

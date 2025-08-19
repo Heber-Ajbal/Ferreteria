@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin | El Tornillo Feliz</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt="logo"/><b>El Tornillo Feliz</b></a>
+      <div class="spacer"></div>
+      <a href="contact.html">Volver</a>
+    </div>
+  </nav>
+
+  <main class="container section">
+    <h1>Leads guardados localmente</h1>
+    <div class="card">
+      <table class="table" id="tbl">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top:10px; display:flex; gap:10px">
+        <button class="btn btn-primary" onclick="exportLeadsCSV()">Exportar CSV</button>
+        <button class="btn btn-ghost" onclick="clearLeads()">Borrar todo</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span data-year></span> El Tornillo Feliz.</div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    function renderTable(){
+      const rows = getLeads();
+      const tbl = document.getElementById("tbl");
+      const thead = tbl.querySelector("thead tr");
+      const tbody = tbl.querySelector("tbody");
+      tbody.innerHTML = ""; thead.innerHTML = "";
+      if(!rows.length){ tbody.innerHTML = `<tr><td>No hay registros.</td></tr>`; return; }
+      const headers = Object.keys(rows[0]);
+      headers.forEach(h => {
+        const th = document.createElement("th"); th.textContent = h; thead.appendChild(th);
+      });
+      rows.forEach(r => {
+        const tr = document.createElement("tr");
+        headers.forEach(h =>{
+          const td = document.createElement("td"); td.textContent = r[h] ?? ""; tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+    function clearLeads(){
+      if(confirm("¿Seguro que deseas borrar todos los leads almacenados localmente?")){
+        localStorage.removeItem("leads"); renderTable();
+      }
+    }
+    renderTable();
+  </script>
+</body>
+</html>
