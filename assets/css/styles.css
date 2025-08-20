@@ -1,4 +1,4 @@
-/* Ferretería — Tema claro, moderno y llamativo - CORREGIDO */
+/* Ferretería — Tema claro, moderno y llamativo (VERSIÓN ALINEADA) */
 :root{
   --bg:#f6f9fc;          /* fondo claro */
   --panel:#ffffff;       /* paneles */
@@ -11,71 +11,68 @@
   --ring: rgba(37,99,235,.35);
   --radius:18px;
   --shadow:0 10px 30px rgba(2,6,23,.08);
+
+  /* === NUEVO: medidas de layout consistentes === */
+  --sidebar-w: 220px;    /* ancho único del sidebar */
+  --container: 1120px;   /* ancho visual del contenido */
+  --gap: 24px;
 }
+
 
 *{box-sizing:border-box}
 html,body{height:100%}
 
-body {
-  margin: 0;
+body{
+  margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
   background: linear-gradient(135deg, #eef4ff 0%, var(--bg) 65%);
   color: var(--text);
   line-height:1.6;
 }
 
-/* Sidebar - IGUAL QUE ANTES */
-.sidebar {
-  width: 220px;
-  background: #222;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding: 20px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ================= Sidebar ================= */
+.sidebar{
+  width: var(--sidebar-w);
+  background:#222;
+  color:#fff;
+  height:100vh;
+  position:fixed;
+  top:0; left:0;
+  padding:20px 10px;
+  display:flex; flex-direction:column; gap:20px;
+  border-right:1px solid rgba(255,255,255,.08);
 }
-
-.sidebar .brand {
-  text-align: center;
+.sidebar .brand{ text-align:center }
+.sidebar img{ width:36px; height:36px }
+.sidebar ul{ list-style:none; padding:0; margin:0 }
+.sidebar li{ margin:10px 0 }
+.sidebar a{
+  color:#fff; text-decoration:none; display:flex; align-items:center; gap:10px;
+  padding:10px; border-radius:8px; transition:background .3s;
 }
+.sidebar a:hover, .sidebar a.active{ background:#444 }
 
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar ul li {
-  margin: 10px 0;
-}
-
-.sidebar ul li a {
-  color: #fff;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  transition: background 0.3s;
-}
-
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
-  background: #444;
-}
-
+/* ================ Contenedor y Main ================ */
+/* Contenedor centrado */
 .container{
-  width: 100%;
-  max-width: 1400px;
+  max-width: var(--container);
   margin-inline: auto;
-  padding: 0 15px;
+  width: 100%;
+  padding: 0 20px;
 }
 
+/* IMPORTANTE: el main se desplaza UNA SOLA VEZ por el sidebar */
+main.container{
+  margin-left: var(--sidebar-w);
+  padding: 20px 20px;
+}
+
+/* Las secciones NO añaden margen extra a la izquierda */
+.section{
+  padding: 30px 20px 20px;
+}
+
+/* ================ Marca / navbar opcional ================ */
 .nav{
   position:sticky; top:0; z-index:10;
   backdrop-filter: blur(6px);
@@ -84,69 +81,34 @@ body {
 }
 .nav-inner{display:flex; align-items:center; gap:16px; padding:12px 0}
 .brand{
-  display:flex; 
-  align-items:center; 
-  gap:12px; 
-  text-decoration:none; 
-  color:var(--text);
-  transition: all 0.3s ease;
+  display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text);
+  transition: transform .3s ease;
 }
-
-.brand:hover {
-  transform: translateY(-2px);
-}
-
-.brand::before {
-  content: "🔧";
-  font-size: 32px;
-  filter: drop-shadow(0 4px 8px rgba(37,99,235,0.3));
+.brand:hover{ transform: translateY(-2px) }
+.brand::before{
+  content:"🔧"; font-size:32px;
+  filter: drop-shadow(0 4px 8px rgba(37,99,235,.3));
   animation: toolRotate 3s ease-in-out infinite;
 }
-
 .brand b{
-  letter-spacing:.8px;
-  font-size: 22px;
-  font-weight: 800;
+  letter-spacing:.8px; font-size:22px; font-weight:800;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
   background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
   animation: brandGradient 4s ease infinite;
 }
+@keyframes toolRotate{ 0%,100%{rotate:-5deg} 50%{rotate:5deg} }
+@keyframes brandGradient{ 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+.nav a{ color:var(--text); text-decoration:none; opacity:.9; padding:8px 12px; border-radius:12px }
+.nav a:hover{ background:rgba(2,6,23,.06) }
 
-@keyframes toolRotate {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
-}
-
-@keyframes brandGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.brand img{width:36px; height:36px}
-.spacer{flex:1}
-.nav a{
-  color:var(--text); text-decoration:none; opacity:.9; padding:8px 12px; border-radius:12px;
-}
-.nav a:hover{background:rgba(2,6,23,.06)}
-
-/* Hero section más compacto */
+/* ================ Hero ================ */
 .hero{
   padding: clamp(20px, 4vw, 50px) 0 30px;
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 30px; 
-  align-items: center;
-  max-width: none;
-}
-
-@media (max-width: 1100px){
-  .hero{
-    grid-template-columns: 1fr; 
-    gap: 25px;
-  }
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;     /* alinear por arriba para evitar “salto” */
 }
 .badge{
   display:inline-flex; align-items:center; gap:8px;
@@ -155,10 +117,10 @@ body {
   border: 1px solid rgba(37,99,235,.25);
   padding:6px 10px; border-radius:999px; font-size:14px;
 }
-h1{font-size: clamp(28px, 5vw, 52px); line-height:1.1; margin:14px 0}
-.lead{font-size: clamp(16px, 2.1vw, 19px); color: var(--muted); margin-bottom:24px}
+h1{ font-size: clamp(28px, 5vw, 52px); line-height:1.1; margin:14px 0 }
+.lead{ font-size: clamp(16px, 2.1vw, 19px); color: var(--muted); margin-bottom:24px }
 
-.cta{display:flex; gap:12px; flex-wrap:wrap}
+.cta{ display:flex; gap:12px; flex-wrap:wrap }
 .btn{
   border:0; cursor:pointer; text-decoration:none;
   padding:12px 16px; border-radius:14px; font-weight:600;
@@ -166,13 +128,24 @@ h1{font-size: clamp(28px, 5vw, 52px); line-height:1.1; margin:14px 0}
   transition: transform .12s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
   display:inline-flex; align-items:center; gap:10px;
 }
-.btn:active{transform: translateY(1px)}
-.btn-primary{background:var(--primary); color:#ffffff}
-.btn-primary:hover{background:var(--primary-700); color:#ffffff}
-.btn-secondary{background:var(--secondary); color:#111111}
-.btn-ghost{background:transparent; border:1px solid rgba(2,6,23,.15); color:var(--text)}
-.btn-ghost:hover{background:rgba(2,6,23,.06)}
+.btn:active{ transform: translateY(1px) }
+.btn-primary{ background:var(--primary); color:#fff }
+.btn-primary:hover{ background:var(--primary-700) }
+.btn-secondary{ background:var(--secondary); color:#111 }
+.btn-ghost{ background:transparent; border:1px solid rgba(2,6,23,.15); color:var(--text) }
+.btn-ghost:hover{ background:rgba(2,6,23,.06) }
 
+.kpis{
+  display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-top:16px;
+}
+.kpi{
+  background:#fff; border:1px dashed rgba(2,6,23,.12);
+  padding:12px; border-radius:12px; text-align:center;
+}
+.kpi b{ font-size:22px; color:var(--text) }
+.kpi span{ display:block; color:var(--muted); font-size:13px }
+
+/* Tarjeta del formulario */
 .hero-card{
   background: radial-gradient(1200px 600px at -10% -30%, rgba(245,158,11,.15), transparent 60%),
               radial-gradient(900px 700px at 120% 20%, rgba(37,99,235,.12), transparent 60%),
@@ -181,28 +154,29 @@ h1{font-size: clamp(28px, 5vw, 52px); line-height:1.1; margin:14px 0}
   padding:20px; border-radius:var(--radius);
   box-shadow: var(--shadow);
 }
+.form-row{ display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+@media(max-width:700px){ .form-row{ grid-template-columns:1fr } }
+label{ display:block; margin:10px 0 6px }
+input, textarea, select{
+  width:100%; padding:12px 14px; border-radius:12px; background:#fff;
+  border:1px solid rgba(2,6,23,.12); color:var(--text); outline:none;
+}
+input:focus, textarea:focus, select:focus{ box-shadow: 0 0 0 4px var(--ring) }
+small.help{ color:var(--muted) }
 
-/* Grid mejorado y más compacto */
+/* ================ Grids y Cards ================ */
 .grid{
-  display: grid; 
+  display:grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, minmax(0,1fr));
   margin-bottom: 20px;
 }
-
-.col-4{grid-column: span 1}
-.col-6{grid-column: span 2}
-.col-12{grid-column: span 3}
-
 @media(max-width: 900px){
-  .col-4, .col-6, .col-12{grid-column: span 1}
-  .grid{
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
+  .grid{ grid-template-columns: 1fr 1fr }
 }
-
-/* Cards con mejor spacing */
+@media(max-width: 640px){
+  .grid{ grid-template-columns: 1fr }
+}
 .card{
   background: linear-gradient(180deg, rgba(2,6,23,.02), rgba(2,6,23,.01));
   border:1px solid rgba(2,6,23,.08);
@@ -210,352 +184,308 @@ h1{font-size: clamp(28px, 5vw, 52px); line-height:1.1; margin:14px 0}
   padding: 20px;
   box-shadow: var(--shadow);
   transition: transform .15s ease, border-color .2s ease;
-  margin-bottom: 16px;
 }
+.card:hover{ transform: translateY(-2px); border-color: rgba(37,99,235,.25) }
+.card h3{ margin: 0 0 8px 0; font-size: 18px }
+.card p{ color: var(--muted); margin:0; line-height:1.5 }
 
-.card:hover{
-  transform: translateY(-2px); 
-  border-color: rgba(37,99,235,.25);
-}
+.section{ padding: 30px 0 20px }
+.section:first-child{ padding-top: 20px }
+.section h2{ font-size: clamp(24px, 3.5vw, 36px); margin: 0 0 20px }
+.section h3{ margin: 0 0 12px }
+.section p{ margin-bottom: 16px }
+.mini{ font-size:14px; color:var(--muted) }
 
-.card h3{
-  margin: 0 0 8px 0;
-  font-size: 18px;
-}
-
-.card p{
-  color: var(--muted); 
-  margin: 0;
-  line-height: 1.5;
-}
-
-.kpis{display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:16px}
-.kpi{background:#ffffff; border:1px dashed rgba(2,6,23,.12); padding:12px; border-radius:12px; text-align:center}
-.kpi b{font-size:22px; color:var(--text)}
-.kpi span{display:block; color:var(--muted); font-size:13px}
-
-/* Sections con mejor spacing */
-.section{
-  padding: 30px 0 20px;
-}
-
-.section:first-child {
-  padding-top: 20px;
-}
-
-.section h2{
-  font-size: clamp(24px, 3.5vw, 36px); 
-  margin-bottom: 20px;
-  margin-top: 0;
-}
-
-.section h3{
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-.section p {
-  margin-bottom: 16px;
-}
-.mini{font-size:14px; color:var(--muted)}
-
-input, textarea, select{
-  width:100%; padding:12px 14px; border-radius:12px; background:#ffffff;
-  border:1px solid rgba(2,6,23,.12); color:var(--text);
-  outline: none;
-}
-input:focus, textarea:focus, select:focus{box-shadow: 0 0 0 4px var(--ring)}
-label{display:block; margin:10px 0 6px}
-.form-row{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
-@media(max-width:700px){.form-row{grid-template-columns:1fr}}
-small.help{color:var(--muted)}
-
-.inline{display:inline-block}
-.badge-cat{display:inline-flex; align-items:center; gap:8px; font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(2,6,23,.12)}
-
-.fab-wa{
-  position:fixed; right:18px; bottom:18px; z-index:50;
-  border-radius:999px;
-  padding:14px 16px;
-  background: #25D366; color:#ffffff; font-weight:700; text-decoration:none;
-  box-shadow: var(--shadow);
-}
-.hidden{display:none !important}
-
-.table{width:100%; border-collapse: collapse; font-size:14px; background:#ffffff}
-.table th, .table td{padding:10px 12px; border-bottom:1px solid rgba(2,6,23,.08)}
-.table th{text-align:left; color:#334155; font-weight:600}
-
+/* ================ Tabla, alertas, tags ================ */
+.table{ width:100%; border-collapse:collapse; font-size:14px; background:#fff }
+.table th, .table td{ padding:10px 12px; border-bottom:1px solid rgba(2,6,23,.08) }
+.table th{ text-align:left; color:#334155; font-weight:600 }
 .alert{
   padding:12px 14px; border:1px solid rgba(2,6,23,.12); background: rgba(245,158,11,.10);
   border-left:4px solid #f59e0b; border-radius:10px; color:#7a4a00; margin: 10px 0;
 }
+.tag{ padding:4px 8px; border-radius:8px; font-size:12px; border:1px solid rgba(2,6,23,.12) }
+.tag-primary{ background: rgba(37,99,235,.12); color:#0c1116; border-color:rgba(37,99,235,.3) }
+.tag-secondary{ background: rgba(245,158,11,.14); color:#7a4a00; border-color:rgba(245,158,11,.35) }
 
-.tag{padding:4px 8px; border-radius:8px; font-size:12px; border:1px solid rgba(2,6,23,.12)}
-.tag-primary{background: rgba(37,99,235,.12); color:#0c1116; border-color:rgba(37,99,235,.3)}
-.tag-secondary{background: rgba(245,158,11,.14); color:#7a4a00; border-color:rgba(245,158,11,.35)}
-
-/* AJUSTE PARA CORREGIR EL ESPACIO A LA DERECHA - SOLO ESTE CAMBIO */
-main, .section {
-  margin-left: 240px;
-  padding: 15px 20px 15px 15px; /* Aumentar padding derecho para usar mejor el espacio */
-  width: auto; /* CAMBIO CLAVE: de calc(100% - 240px) a auto */
-  max-width: none; /* Asegurar que use todo el espacio disponible */
+/* ================ Botón flotante ================ */
+.fab-wa{
+  position:fixed; right:18px; bottom:18px; z-index:50;
+  border-radius:999px; padding:14px 16px;
+  background:#25D366; color:#fff; font-weight:700; text-decoration:none;
+  box-shadow: var(--shadow);
 }
+.hidden{ display:none !important }
 
-/* Contenedor principal que ocupa todo el espacio disponible */
-.main-content {
-  margin-left: 240px;
-  min-height: 100vh;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  width: auto; /* CAMBIO CLAVE: de calc(100% - 240px) a auto */
-}
-
-.main-content > *:not(.footer) {
-  flex: 1;
-  padding: 15px 20px 15px 15px; /* Padding asimétrico para mejor uso del espacio */
-}
-
-/* Footer optimizado - SOLO CAMBIO DE WIDTH */
+/* ================ Footer alineado ================ */
 .footer{
-  margin-left: 240px;
+  margin-left: var(--sidebar-w);     /* mismo desplazamiento que el main */
   margin-top: auto;
-  
-  background: #ffffff;
-  color: var(--text);
+  background:#fff; color:var(--text);
   padding: 35px 20px 25px;
   position: relative;
-  width: auto; /* CAMBIO CLAVE: de calc(100% - 240px) a auto */
+  width: auto;
   border-top: 1px solid rgba(2,6,23,.06);
   box-shadow: 0 -15px 30px rgba(2,6,23,.03);
 }
-
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
+.footer::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
   background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary), var(--primary));
-  background-size: 300% 100%;
-  animation: borderFlow 6s linear infinite;
+  background-size:300% 100%; animation: borderFlow 6s linear infinite;
 }
+@keyframes borderFlow{ 0%{background-position:0 0} 100%{background-position:300% 0} }
 
-@keyframes borderFlow {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 300% 0%; }
+.footer-content{
+  display:grid; grid-template-columns: 1fr auto 1fr;
+  align-items:center; gap:30px;
+  max-width: var(--container);       /* MISMO ancho que el main */
+  margin:0 auto; width:100%;
 }
-
-.footer-content {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 30px;
-  max-width: none;
-  margin: 0;
-  width: 100%;
+.footer-brand{
+  display:flex; align-items:center; gap:15px;
+  font-weight:800; font-size:20px; color:var(--text);
 }
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-weight: 800;
-  font-size: 20px;
-  color: var(--text);
-}
-
-.footer-brand::before {
-  content: "🔧";
-  font-size: 28px;
-  filter: drop-shadow(0 3px 6px rgba(37,99,235,0.2));
+.footer-brand::before{
+  content:"🔧"; font-size:28px;
+  filter: drop-shadow(0 3px 6px rgba(37,99,235,.2));
   animation: toolFloat 3s ease-in-out infinite;
 }
+@keyframes toolFloat{ 0%,100%{ transform: translateY(0) rotate(-2deg) } 50%{ transform: translateY(-3px) rotate(2deg) } }
 
-@keyframes toolFloat {
-  0%, 100% { transform: translateY(0px) rotate(-2deg); }
-  50% { transform: translateY(-3px) rotate(2deg); }
-}
+.footer-center{ text-align:center }
+.footer-copy{ font-size:14px; opacity:.7; margin-bottom:15px; font-weight:500 }
 
-.footer-center {
-  text-align: center;
-}
-
-.footer-copy {
-  font-size: 14px;
-  opacity: 0.7;
-  margin-bottom: 15px;
-  font-weight: 500;
-}
-
-.footer-social {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+.footer-social{ display:flex; gap:15px; justify-content:center; margin-bottom:10px }
+.social-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:50%;
   background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  text-decoration: none;
-  font-size: 20px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(37,99,235,0.2);
-  position: relative;
-  overflow: hidden;
+  color:#fff; text-decoration:none; font-size:20px;
+  transition: all .3s ease; box-shadow:0 4px 15px rgba(37,99,235,.2);
+  position:relative; overflow:hidden;
 }
+.social-icon::before{
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-size:20px; z-index:2;
+}
+.social-icon:hover{ transform: translateY(-3px) scale(1.05); box-shadow:0 8px 25px rgba(37,99,235,.3) }
+.social-icon.facebook{ background: linear-gradient(135deg, #1877F2, #42A5F5) }
+.social-icon.facebook::before{ content:'f'; font-family: Arial; font-weight:bold; font-style:italic }
+.social-icon.instagram{
+  background: linear-gradient(45deg,#405DE6,#5851DB,#833AB4,#C13584,#E1306C,#FD1D1D,#F56040,#F77737,#FCAF45,#FFDC80)
+}
+.social-icon.instagram::before{
+  content:''; width:24px; height:24px; border:2px solid #fff; border-radius:6px; position:relative;
+}
+.social-icon.instagram::after{
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:8px; height:8px; border:2px solid #fff; border-radius:50%; z-index:3;
+}
+.social-icon.tiktok{ background: linear-gradient(135deg, #000, #FF0050, #00F2EA) }
+.social-icon.tiktok::before{ content:'♪'; font-size:22px; font-weight:bold }
+.social-icon.whatsapp{ background: linear-gradient(135deg, #25D366, #128C7E) }
+.social-icon.whatsapp::before{
+  content:''; width:20px; height:20px; border:2px solid #fff; border-radius:50%; position:relative;
+}
+.social-icon.whatsapp::after{
+  content:''; position:absolute; top:45%; left:48%; transform:translate(-50%,-50%);
+  width:0; height:0; border-left:4px solid #fff; border-top:3px solid transparent; border-bottom:3px solid transparent; z-index:3;
+}
+.social-icon.phone{ background: linear-gradient(135deg, var(--secondary), #FF8A65) }
+.social-icon.phone::before{ content:'📞'; font-size:18px }
 
-.social-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-  z-index: 2;
+.footer-links{ display:flex; gap:25px; justify-content:flex-end; flex-wrap:wrap }
+.footer-links a{
+  color:var(--muted); text-decoration:none; padding:8px 0; font-weight:500; font-size:14px; position:relative;
+  transition: all .3s ease;
 }
-
-.social-icon:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(37,99,235,0.3);
-}
-
-.social-icon.facebook { 
-  background: linear-gradient(135deg, #1877F2, #42A5F5); 
-}
-.social-icon.facebook::before { content: 'f'; font-family: Arial; font-weight: bold; font-style: italic; }
-
-.social-icon.instagram { 
-  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80); 
-}
-.social-icon.instagram::before { 
-  content: '';
-  width: 24px;
-  height: 24px;
-  border: 2px solid white;
-  border-radius: 6px;
-  position: relative;
-}
-.social-icon.instagram::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border: 2px solid white;
-  border-radius: 50%;
-  z-index: 3;
-}
-
-.social-icon.tiktok { 
-  background: linear-gradient(135deg, #000000, #FF0050, #00F2EA); 
-}
-.social-icon.tiktok::before { 
-  content: '♪';
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.social-icon.whatsapp { 
-  background: linear-gradient(135deg, #25D366, #128C7E); 
-}
-.social-icon.whatsapp::before { 
-  content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid white;
-  border-radius: 50%;
-  position: relative;
-}
-.social-icon.whatsapp::after {
-  content: '';
-  position: absolute;
-  top: 45%;
-  left: 48%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-left: 4px solid white;
-  border-top: 3px solid transparent;
-  border-bottom: 3px solid transparent;
-  z-index: 3;
-}
-
-.social-icon.phone { 
-  background: linear-gradient(135deg, var(--secondary), #FF8A65); 
-}
-.social-icon.phone::before { 
-  content: '📞';
-  font-size: 18px;
-}
-
-.footer-links {
-  display: flex;
-  gap: 25px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: var(--muted);
-  text-decoration: none;
-  padding: 8px 0;
-  font-weight: 500;
-  font-size: 14px;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.footer-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
+.footer-links a::after{
+  content:''; position:absolute; bottom:0; left:0; width:0; height:2px;
   background: linear-gradient(90deg, var(--primary), var(--accent));
-  transition: width 0.3s ease;
+  transition: width .3s ease;
+}
+.footer-links a:hover{ color:var(--primary); transform: translateY(-1px) }
+.footer-links a:hover::after{ width:100% }
+
+/* ================ Responsive para mover el sidebar arriba ================ */
+@media (max-width: 980px){
+  .sidebar{
+    position: sticky; top:0;
+    width: 100%; height: auto;
+    flex-direction: row; align-items: center; gap: 12px; z-index: 10;
+    padding: 12px 16px;
+  }
+  .sidebar ul{ display:flex; flex-wrap:wrap; gap:6px; margin-left:auto }
+  .sidebar a{ padding:8px 10px }
+
+  /* Cuando el sidebar pasa arriba, el contenido ya no necesita margen izquierdo */
+  main.container,
+  .footer{
+    margin-left: 0;
+  }
+
+  .hero{ grid-template-columns: 1fr }
+  .grid{ grid-template-columns: 1fr 1fr }
+}
+@media (max-width: 700px){
+  .grid{ grid-template-columns: 1fr }
 }
 
-.footer-links a:hover {
-  color: var(--primary);
-  transform: translateY(-1px);
+/* === USAR MEJOR EL LADO DERECHO (pantallas anchas) === */
+
+/* 1) Amplía el ancho visual del contenido */
+:root{
+  --container: 1360px;   /* antes: 1120px. Puedes subir a 1440px si quieres aún más */
 }
 
-.footer-links a:hover::after {
+/* 2) El .container ahora sí ocupa más en pantallas grandes */
+.container{
+  max-width: var(--container);
+}
+
+/* 3) Que el HERO llene el espacio derecho sin que el texto se haga eterno */
+.hero{
+  /* columna izquierda (texto) flexible pero con mínimo cómodo,
+     columna derecha (form) con ancho útil */
+  grid-template-columns: minmax(620px, 1.2fr) minmax(440px, 560px);
+  gap: 42px;               /* un poco más de separación */
+  align-items: start;      /* alinear arriba */
+}
+
+/* Limita el ancho de lectura del bloque de texto para que no se vea “chorizo” */
+.hero > div:first-child{
+  max-width: 780px;        /* título + párrafo con buena legibilidad */
+}
+
+/* La tarjeta puede crecer un poco más para ocupar mejor la derecha */
+.hero-card{
+  max-width: 560px;
+}
+
+/* 4) En pantallas enormes puedes expandir un poquito más (opcional) */
+@media (min-width: 1600px){
+  :root{ --container: 1440px; }   /* sube el contenedor en monitores muy anchos */
+  .hero{
+    grid-template-columns: minmax(640px, 1.2fr) minmax(460px, 600px);
+  }
+}
+
+/* ==== FULL WIDTH sin scroll + responsive ==== */
+
+/* 1) Main y footer llenan el espacio restante del sidebar
+      usando % (no vw) para evitar la barra horizontal */
+main.container,
+.footer{
+  margin-left: var(--sidebar-w);
+  width: calc(100% - var(--sidebar-w)); /* <-- antes usábamos 100vw */
+  max-width: none;
+  padding-inline: clamp(16px, 2vw, 28px);
+  overflow-x: clip; /* por si algún hijo se desborda por 1px */
+}
+
+/* 2) El "container" deja de limitar ancho, pero sin causar overflow */
+.container{
+  max-width: none;
   width: 100%;
 }
 
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+/* 3) Hero fluido y sin límites que dejen huecos;
+      columnas iguales y gap adaptativo */
+.hero{
+  max-width: none;
+  grid-template-columns: minmax(420px, 1fr) minmax(420px, 1fr);
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
 }
 
-@media (max-width: 768px) {
-  .footer-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 25px;
-  }
-  
-  .footer-links {
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .footer-social {
-    gap: 12px;
-  }
+/* 4) Rejillas que rellenan todo el ancho de forma estética */
+.grid{
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  max-width: none;
+  width: 100%;
 }
+
+/* 5) Salvaguardas contra desbordes accidentales */
+img, svg, video{ max-width: 100%; height: auto; display: block }
+
+/* 6) Responsive: cuando el sidebar ya no ocupa lateral,
+      el contenido vuelve a 100% sin restas */
+@media (max-width: 980px){
+  main.container,
+  .footer{
+    margin-left: 0;
+    width: 100%;
+  }
+  .hero{ grid-template-columns: 1fr; }
+}
+
+.sidebar{
+  width: var(--sidebar-w);
+  background: linear-gradient(180deg, #1f2937, #111827);
+  color:#e5e7eb;
+  border-right:1px solid rgba(255,255,255,.06);
+  box-shadow: 2px 0 18px rgba(0,0,0,.12);
+  display:flex; flex-direction:column;
+  gap: 10px;
+  padding: 12px 10px;
+  transition: width .22s ease, transform .25s ease;
+  overflow: hidden;
+}
+.sb-header{ display:flex; align-items:center; gap:10px }
+.sidebar .brand{ display:flex; align-items:center; gap:10px; color:#e5e7eb; text-decoration:none }
+.sidebar .brand img{ width:28px; height:28px }
+.sidebar .brand b{ font-size:18px; line-height:1 }
+
+.sb-toggle{
+  margin-left:auto; width:36px; height:36px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); color:#fff; cursor:pointer;
+  position:relative; flex:0 0 auto;
+}
+.sb-toggle::before{ content:"⟨⟩"; position:absolute; inset:0; display:grid; place-items:center; transform:scaleX(-1) }
+
+.sb-hamburger{
+  display:none; margin-left:6px; width:40px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06); cursor:pointer; gap:5px; align-items:center; justify-content:center;
+}
+.sb-hamburger span{ width:18px; height:2px; background:#fff; display:block; border-radius:2px }
+
+/* lista */
+.sb-nav{ list-style:none; padding: 6px; margin: 2px 0 0; overflow:auto }
+.sb-nav li{ margin:4px 0 }
+.sb-nav a{
+  display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px;
+  color:#e5e7eb; text-decoration:none; transition: background .18s ease, color .18s ease;
+}
+.sb-nav a:hover{ background: rgba(255,255,255,.08) }
+.sb-nav a.active{ background: rgba(255,255,255,.14); color:#fff }
+.sb-nav .ico{ width:26px; text-align:center; font-size:18px }
+.sb-nav .label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+
+/* ===== Estado colapsado: SOLO afecta al nav (clase en .sidebar) ===== */
+.sidebar.is-collapsed{ width: 76px }
+.sidebar.is-collapsed .brand b{ display:none }
+.sidebar.is-collapsed .sb-toggle::before{ transform:none } /* flecha "al revés" */
+.sidebar.is-collapsed .sb-nav a{ justify-content:center; padding-inline:10px }
+.sidebar.is-collapsed .sb-nav .label{ display:none }
+
+/* ===== Móvil: off-canvas SIN tocar body ===== */
+@media (max-width:980px){
+  .sb-hamburger{ display:flex }
+  .sidebar{
+    position: fixed; inset: 0 auto 0 0;
+    transform: translateX(-100%);
+    width: min(84vw, 320px); height: 100dvh; z-index: 105;
+  }
+  .sidebar.is-open{ transform: translateX(0) }
+}
+.sb-backdrop{
+  position: fixed; inset:0; background: rgba(0,0,0,.35);
+  opacity:0; pointer-events:none; transition: opacity .22s ease; z-index:100;
+}
+.sb-backdrop.is-open{ opacity:1; pointer-events:auto }
+
+/* Scrollbar sutil */
+.sidebar::-webkit-scrollbar{ width:8px }
+.sidebar::-webkit-scrollbar-thumb{ background:#374151; border-radius:8px }
+

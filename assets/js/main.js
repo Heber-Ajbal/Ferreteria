@@ -75,3 +75,64 @@ function sendQuoteViaWhatsApp(){
     alert("Configura el número de WhatsApp en assets/js/config.js");
   }
 }
+
+(function(){
+  const root      = document.documentElement;          // para cambiar --sidebar-w
+  const nav       = document.getElementById('sidebar'); 
+  const btnToggle = document.getElementById('sbToggle');      // botón contraer/expandir (desktop)
+  const btnHam    = document.getElementById('sbHamburger');   // botón hamburguesa (móvil)
+  const backdrop  = document.getElementById('sbBackdrop');    // <div class="sb-backdrop" id="sbBackdrop">
+
+  // Anchos (coinciden con tu CSS)
+  const EXPANDED  = '220px';
+  const COLLAPSED = '76px';
+  const KEY       = 'sbCollapsed'; // guardamos preferencia del usuario
+
+  // 1) Estado inicial (si el usuario ya lo había colapsado antes)
+  if (localStorage.getItem(KEY) === '1') {
+    nav.classList.add('is-collapsed');
+    root.style.setProperty('--sidebar-w', COLLAPSED);
+  } else {
+    root.style.setProperty('--sidebar-w', EXPANDED);
+  }
+  // Accesibilidad: estado del botón
+  if (btnToggle) btnToggle.setAttribute('aria-expanded', String(!nav.classList.contains('is-collapsed')));
+
+  // 2) Colapsar/expandir en escritorio
+  function setCollapsed(v) {
+    nav.classList.toggle('is-collapsed', v);
+    root.style.setProperty('--sidebar-w', v ? COLLAPSED : EXPANDED);
+    localStorage.setItem(KEY, v ? '1' : '0');
+    if (btnToggle) {
+      btnToggle.setAttribute('aria-expanded', String(!v));
+      btnToggle.title = v ? 'Expandir menú' : 'Contraer menú';
+      btnToggle.setAttribute('aria-label', btnToggle.title);
+    }
+  }
+  btnToggle && btnToggle.addEventListener('click', () => {
+    setCollapsed(!nav.classList.contains('is-collapsed'));
+  });
+  // Tecla Enter/Espacio sobre el botón
+  btnToggle && btnToggle.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btnToggle.click(); }
+  });
+
+  // 3) Off-canvas en móvil
+  function openMobile(){ nav.classList.add('is-open');  backdrop && backdrop.classList.add('is-open'); }
+  function closeMobile(){ nav.classList.remove('is-open'); backdrop && backdrop.classList.remove('is-open'); }
+
+  btnHam && btnHam.addEventListener('click', ()=>{
+    nav.classList.contains('is-open') ? closeMobile() : openMobile();
+  });
+  backdrop && backdrop.addEventListener('click', closeMobile);
+  // Cierra al navegar
+  nav.querySelectorAll('.sb-nav a').forEach(a => a.addEventListener('click', closeMobile));
+  // Cierra con ESC
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
+
+  // 4) Tips visuales del botón (texto alterno para que "se note" cuál es)
+  if (btnToggle && !btnToggle.title) {
+    btnToggle.title = nav.classList.contains('is-collapsed') ? 'Expandir menú' : 'Contraer menú';
+    btnToggle.setAttribute('aria-label', btnToggle.title);
+  }
+})();
