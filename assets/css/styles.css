@@ -30,27 +30,6 @@ body{
   line-height:1.6;
 }
 
-/* ================= Sidebar ================= */
-.sidebar{
-  width: var(--sidebar-w);
-  background:#222;
-  color:#fff;
-  height:100vh;
-  position:fixed;
-  top:0; left:0;
-  padding:20px 10px;
-  display:flex; flex-direction:column; gap:20px;
-  border-right:1px solid rgba(255,255,255,.08);
-}
-.sidebar .brand{ text-align:center }
-.sidebar img{ width:36px; height:36px }
-.sidebar ul{ list-style:none; padding:0; margin:0 }
-.sidebar li{ margin:10px 0 }
-.sidebar a{
-  color:#fff; text-decoration:none; display:flex; align-items:center; gap:10px;
-  padding:10px; border-radius:8px; transition:background .3s;
-}
-.sidebar a:hover, .sidebar a.active{ background:#444 }
 
 /* ================ Contenedor y Main ================ */
 /* Contenedor centrado */
@@ -309,15 +288,7 @@ small.help{ color:var(--muted) }
 
 /* ================ Responsive para mover el sidebar arriba ================ */
 @media (max-width: 980px){
-  .sidebar{
-    position: sticky; top:0;
-    width: 100%; height: auto;
-    flex-direction: row; align-items: center; gap: 12px; z-index: 10;
-    padding: 12px 16px;
-  }
-  .sidebar ul{ display:flex; flex-wrap:wrap; gap:6px; margin-left:auto }
-  .sidebar a{ padding:8px 10px }
-
+  
   /* Cuando el sidebar pasa arriba, el contenido ya no necesita margen izquierdo */
   main.container,
   .footer{
@@ -420,22 +391,8 @@ img, svg, video{ max-width: 100%; height: auto; display: block }
   .hero{ grid-template-columns: 1fr; }
 }
 
-.sidebar{
-  width: var(--sidebar-w);
-  background: linear-gradient(180deg, #1f2937, #111827);
-  color:#e5e7eb;
-  border-right:1px solid rgba(255,255,255,.06);
-  box-shadow: 2px 0 18px rgba(0,0,0,.12);
-  display:flex; flex-direction:column;
-  gap: 10px;
-  padding: 12px 10px;
-  transition: width .22s ease, transform .25s ease;
-  overflow: hidden;
-}
 .sb-header{ display:flex; align-items:center; gap:10px }
-.sidebar .brand{ display:flex; align-items:center; gap:10px; color:#e5e7eb; text-decoration:none }
-.sidebar .brand img{ width:28px; height:28px }
-.sidebar .brand b{ font-size:18px; line-height:1 }
+
 
 .sb-toggle{
   margin-left:auto; width:36px; height:36px; border-radius:10px;
@@ -455,37 +412,273 @@ img, svg, video{ max-width: 100%; height: auto; display: block }
 .sb-nav li{ margin:4px 0 }
 .sb-nav a{
   display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px;
-  color:#e5e7eb; text-decoration:none; transition: background .18s ease, color .18s ease;
+  color:#000000; text-decoration:none; transition: background .18s ease, color .18s ease;
 }
 .sb-nav a:hover{ background: rgba(255,255,255,.08) }
-.sb-nav a.active{ background: rgba(255,255,255,.14); color:#fff }
+.sb-nav a.active{ background: rgba(255,255,255,.14); color:#000000 }
 .sb-nav .ico{ width:26px; text-align:center; font-size:18px }
 .sb-nav .label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 
 /* ===== Estado colapsado: SOLO afecta al nav (clase en .sidebar) ===== */
-.sidebar.is-collapsed{ width: 76px }
-.sidebar.is-collapsed .brand b{ display:none }
-.sidebar.is-collapsed .sb-toggle::before{ transform:none } /* flecha "al revés" */
-.sidebar.is-collapsed .sb-nav a{ justify-content:center; padding-inline:10px }
-.sidebar.is-collapsed .sb-nav .label{ display:none }
+
 
 /* ===== Móvil: off-canvas SIN tocar body ===== */
-@media (max-width:980px){
-  .sb-hamburger{ display:flex }
-  .sidebar{
-    position: fixed; inset: 0 auto 0 0;
-    transform: translateX(-100%);
-    width: min(84vw, 320px); height: 100dvh; z-index: 105;
-  }
-  .sidebar.is-open{ transform: translateX(0) }
-}
+
 .sb-backdrop{
   position: fixed; inset:0; background: rgba(0,0,0,.35);
   opacity:0; pointer-events:none; transition: opacity .22s ease; z-index:100;
 }
 .sb-backdrop.is-open{ opacity:1; pointer-events:auto }
 
-/* Scrollbar sutil */
-.sidebar::-webkit-scrollbar{ width:8px }
-.sidebar::-webkit-scrollbar-thumb{ background:#374151; border-radius:8px }
 
+/* --- Layout main y footer alineados con sidebar sólo en pantallas grandes --- */
+@media (min-width: 992px){
+  .site-main,
+  .footer{
+    margin-left: var(--sidebar-w);
+    width: calc(100% - var(--sidebar-w));
+  }
+}
+@media (max-width: 991.98px){
+  .site-main,
+  .footer{
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* --- Tarjeta de producto --- */
+.product-card{
+  background: #fff;
+  border: 1px solid rgba(2,6,23,.08);
+  border-radius: var(--radius, 18px);
+  box-shadow: var(--shadow, 0 10px 30px rgba(2,6,23,.08));
+  overflow: hidden;
+  position: relative;
+  transition: transform .15s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.product-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(37,99,235,.25);
+  box-shadow: 0 14px 34px rgba(2,6,23,.12);
+}
+
+/* etiqueta de categoría */
+.product-badge{
+  position: absolute;
+  top: .5rem; left: .5rem;
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  font-size: .75rem;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+  z-index: 2;
+}
+
+/* imagen */
+.product-thumb{ background: #0f172a; }
+.img-cover{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.001);
+}
+.product-card:hover .img-cover{ transform: scale(1.03); transition: transform .35s ease }
+
+/* textos */
+.product-title{ margin: 0 0 6px 0; font-size: 1rem; line-height: 1.3 }
+.product-price{ color: var(--text, #0c1116); font-weight: 700; margin: 0 }
+
+/* Mejoras en la card de filtros Bootstrap (opcional) */
+.card .form-label{ font-weight: 600 }
+
+/* ====== FIX SIDEBAR RESPONSIVE (poner al FINAL del CSS) ====== */
+:root{
+  --sidebar-w: 220px; /* aseguramos consistencia */
+}
+
+/* Topbar: solo móvil */
+site-sidebar .sb-topbar{
+  display: none;
+}
+
+/* Sidebar base (desktop): fijo a la izquierda */
+site-sidebar > .sidebar{
+  width: var(--sidebar-w);
+  position: fixed;
+  inset: 0 auto 0 0;
+  height: 100dvh;
+  background: linear-gradient(180deg, #bcd8ff, #ffffff);
+  color: #0c1116;
+  border-right: 1px solid rgba(2,6,23,.06);
+  box-shadow: 2px 0 18px rgba(0,0,0,.08);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  z-index: 50;
+}
+site-sidebar .sidebar .brand{
+  display:flex; align-items:center; gap:10px;
+}
+site-sidebar .sidebar .brand img{ width:28px; height:28px }
+site-sidebar .sb-nav{ list-style:none; padding:6px; margin:6px 0 0 }
+site-sidebar .sb-nav li{ margin:4px 0 }
+site-sidebar .sb-nav a{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px; border-radius:12px;
+  color:#0c1116; text-decoration:none;
+  transition: background .18s ease, color .18s ease;
+}
+site-sidebar .sb-nav a:hover{ background: rgba(2,6,23,.06) }
+site-sidebar .sb-nav a.active{
+  background: rgba(37,99,235,.12);
+  color:#0c1116;
+}
+site-sidebar .sb-nav .ico{ width:26px; text-align:center; font-size:18px }
+site-sidebar .sb-nav .label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+
+/* Layout desktop: contenido desplazado una sola vez */
+@media (min-width: 981px){
+  main.container,
+  .footer{
+    margin-left: var(--sidebar-w) !important;
+    width: calc(100% - var(--sidebar-w)) !important;
+  }
+}
+
+/* ===== MÓVIL (≤980px): drawer off-canvas con topbar ===== */
+@media (max-width: 980px){
+  /* Topbar visible: hamburguesa + marca */
+  site-sidebar .sb-topbar{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: 10px 14px;
+    background: #fff;
+    border-bottom: 1px solid rgba(2,6,23,.06);
+  }
+  site-sidebar .sb-topbar .brand{
+    display:flex; align-items:center; gap:10px;
+    color:#0c1116; text-decoration:none;
+  }
+  site-sidebar .sb-topbar .brand img{ width:24px; height:24px }
+  site-sidebar .sb-topbar .brand b{ font-size:16px }
+
+  /* Hamburguesa */
+  site-sidebar .sb-hamburger{
+    width: 40px; height: 36px; border-radius: 10px;
+    border: 1px solid rgba(2,6,23,.12);
+    background: #fff; cursor: pointer;
+    display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; padding: 0 10px;
+  }
+  site-sidebar .sb-hamburger span{
+    width: 100%; height: 2px; background: #0c1116; display:block; border-radius: 2px;
+  }
+
+  /* Sidebar como drawer */
+  site-sidebar > .sidebar{
+    transform: translateX(-100%);
+    width: min(84vw, 320px);
+    height: 100dvh;
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  site-sidebar > .sidebar.is-open{
+    transform: translateX(0);
+    transition: transform .22s ease-out;
+  }
+
+  /* Backdrop */
+  .sb-backdrop{
+    position: fixed; inset: 0; background: rgba(0,0,0,.35);
+    opacity: 0; pointer-events: none; z-index: 55; transition: opacity .2s ease;
+  }
+  .sb-backdrop.is-open{ opacity: 1; pointer-events: auto }
+
+  /* Contenido a 100% en móvil */
+  main.container,
+  .footer{
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Accesibilidad/scrollbar sutil dentro del drawer */
+site-sidebar > .sidebar::-webkit-scrollbar{ width: 8px }
+site-sidebar > .sidebar::-webkit-scrollbar-thumb{ background:#c7d2fe; border-radius:8px }
+
+/* ===== PARCHE OFF-CANVAS MÓVIL (forzar comportamiento correcto) ===== */
+@media (max-width: 980px){
+  site-sidebar .sb-topbar{ display:flex !important; }
+
+  site-sidebar > .sidebar{
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    width: min(84vw, 320px) !important;
+    height: 100dvh !important;
+    transform: translateX(-100%) !important; /* cerrado por defecto */
+    transition: transform .22s ease-out !important;
+    z-index: 105 !important;
+  }
+  site-sidebar > .sidebar.is-open{ 
+    transform: translateX(0) !important; /* abierto */
+  }
+
+  /* Backdrop */
+  .sb-backdrop{
+    position: fixed !important; inset: 0 !important;
+    background: rgba(0,0,0,.35) !important;
+    opacity: 0; pointer-events: none; z-index: 100;
+    transition: opacity .2s ease;
+  }
+  .sb-backdrop.is-open{ opacity: 1; pointer-events: auto }
+
+  /* Contenido a 100% cuando el menú es off-canvas */
+  main.container, .footer{
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+
+/* ==== Sticky footer: que el footer quede siempre abajo ==== */
+html, body { height: 100%; }
+
+body{
+  min-height: 100dvh;      /* vista moderna */
+  display: flex;
+  flex-direction: column;
+}
+
+main.container{
+  flex: 1 0 auto;          /* empuja el footer hacia abajo cuando hay poco contenido */
+  min-height: 0;
+}
+
+.footer{
+  margin-top: auto;
+}
+
+/* Mantén alineación con sidebar en desktop */
+@media (min-width: 981px){
+  main.container,
+  .footer{
+    margin-left: var(--sidebar-w);
+    width: calc(100% - var(--sidebar-w));
+  }
+}
+
+/* En móvil, 100% de ancho */
+@media (max-width: 980px){
+  main.container,
+  .footer{
+    margin-left: 0;
+    width: 100%;
+  }
+}
